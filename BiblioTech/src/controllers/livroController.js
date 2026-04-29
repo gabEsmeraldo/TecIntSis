@@ -1,30 +1,37 @@
-const express = require('express');
 const dotenv = require('dotenv').config();
 const supabase = require('./config/database')
 
-const app = express();
-
-app.use(express.json());
-
-getLivros = async (req) => {
+getLivros = async (req, res) => {
   const { data, error } = await supabase
     .from("livro")
     .select("*");
   if (error) return [];
   return data;
-}
+};
 
-getLivrosByID(req) = async (req) => {
-  const { data, error } = await supabase
-    .from("livro")
-    .select("*")
-    .eq("id", req.params.id);
+getLivrosByID = async (req, res) => {
+    let { livroId } = req.params;
+    const { data, error } = await supabase
+        .from("livro")
+        .select("*")
+        .eq("id", livroId);
   if (error) return null;
   return data;
 };
 
-createLivro(req)
+createLivro = async (req, res) => {
+    const { data, error } = await supabase
+        .from("livro")
+        .require("titulo", "autor")
+        .insert(req.body);
+  if (error) return null;
+  return data;
+};
+
+
 
 module.exports = {
-  getLivros
+    getLivros,
+    getLivrosByID,
+    createLivro
 };
