@@ -1,8 +1,11 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, 'src/.env') });
+const livroRoutes = require('./src/routes/livroRoutes');
 
 const app = express();
 app.use(express.json());
+app.use(livroRoutes);
 
 const PORT = process.env.PORT || 3000;
 
